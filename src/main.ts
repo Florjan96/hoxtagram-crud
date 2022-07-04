@@ -1,8 +1,48 @@
 // solution goes here
-function getImage(){
 
 
-    let mondi=document.querySelector('image-container')
+type CommentDt={
+    id:number
+    content:string
+    imageId:number
+}
+
+type Image={
+    id: number
+    title: string
+    likes:number
+    image:string
+    comments: CommentDt[]
+}
+
+
+type State={
+    images:image[]
+}
+
+
+let state :State={
+    images:[]
+}
+
+function getImages(){
+fetch('http://localhost:5000/images')
+.then(resp=>resp.json())
+.then(imagesFromServer=>{
+    state.images=imagesFromServer
+    render()
+})
+}
+
+getImages()
+
+
+
+function render(){
+for(let image of state.images){
+    
+
+   
 //     <article class="image-card">
 //     <h2 class="title">Title of image goes here</h2>
 //     <img src="./assets/image-placeholder.jpg" class="image" />
@@ -21,11 +61,11 @@ article.className="image-card"
 
 let title=document.createElement('h2')
 title.className="title"
-title.textContent="Title of image goes here"
+title.textContent=image.title
 
 let img=document.createElement('img')
 img.className="image"
-img.src="./assets/image-placeholder.jpg"
+img.src=image.image
 
 let div=document.createElement('div')
 div.className="likes-section"
@@ -42,7 +82,7 @@ let ulComments=document.createElement('ul')
 ulComments.className="comments"
 
 let liFirst=document.createElement('li')
-liFirst.textContent="Get rid of these comments"
+liFirst.textContent=image.comments
 
 let liSecond=document.createElement('li')
 liSecond.textContent="And replace them with the real ones"
@@ -54,13 +94,15 @@ liThird.textContent="From the server"
 div.append(span,button)
 ulComments.append(liFirst,liSecond,liThird)
 article.append(div,ulComments,title,img)
+let mondi=document.querySelector('.image-container')
+mondi.append(article)
 
-console.log(article)
-
+// window.article=article
 
 
 
 
 }
+}
 
-getImage()
+render()
